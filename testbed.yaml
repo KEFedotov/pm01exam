@@ -1,0 +1,76 @@
+devices:
+  BR1:
+    connections:
+      cli:
+        ip: 192.168.10.42
+        port: 30001
+        protocol: telnet
+    credentials:
+      default:
+        password: network
+        username: demouser
+      enable:
+        password: wsr
+    os: ios
+    platform: iol
+    type: ios
+  HQ1:
+    connections:
+      cli:
+        ip: 192.168.10.42
+        port: 30003
+        protocol: telnet
+    credentials:
+      default:
+        password: network
+        username: demouser
+      enable:
+        password: wsr
+    os: ios
+    platform: iol
+    type: ios
+  SW1:
+    connections:
+      cli:
+        ip: 192.168.10.42
+        port: 30005
+        protocol: telnet
+    credentials:
+      default:
+        password: network
+        username: demouser
+      enable:
+        password: wsr
+    os: ios
+    platform: iol
+    type: ios
+  SW2:
+    connections:
+      cli:
+        ip: 192.168.10.42
+        port: 30006
+        protocol: telnet
+    credentials:
+      default:
+        password: network
+        username: demouser
+      enable:
+        password: wsr
+    os: ios
+    platform: iol
+    type: ios
+  SW3:
+    connections:
+      cli:
+        ip: 192.168.10.42
+        port: 30007
+        protocol: telnet
+    credentials:
+      default:
+        password: network
+        username: demouser
+      enable:
+        password: wsr
+    os: ios
+    platform: iol
+    type: ios
