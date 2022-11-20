@@ -1,0 +1,27 @@
+---
+criterions:
+- name: C
+  subcriteria:
+  - name: C1 - network configuration
+    aspects:
+    - name: O1
+      description: Hostname
+      check:
+        devices: ['HQ1', 'SW3']
+        action:
+          command: 'show running-config | include hostname'
+          values: ['HQ1', 'SW3']
+    - name: O2
+      description: Domain name
+      check:
+        devices: ['BR1', 'SW2']
+        action:
+          command: 'show running-config | include ip domain'
+          values: ['de.ru']
+    - name: O3
+      description: Local user
+      check:
+        devices: ['HQ1', 'SW1']
+        action:
+          command: 'show running-config | include username'
+          values: ['demouser']
