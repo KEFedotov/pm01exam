@@ -7,21 +7,165 @@ criterions:
     - name: O1
       description: Hostname
       check:
-        devices: ['HQ1', 'SW3']
+        devices: ['BR1', 'SW3']
         action:
-          command: 'show running-config | include hostname'
-          values: ['HQ1', 'SW3']
+          commands: ['show running-config | include hostname']
+          values:
+           - 'BR1'
+           - 'SW3'
     - name: O2
       description: Domain name
       check:
         devices: ['BR1', 'SW2']
         action:
-          command: 'show running-config | include ip domain'
+          commands: ['show running-config | include ip domain']
           values: ['de.ru']
     - name: O3
       description: Local user
       check:
         devices: ['HQ1', 'SW1']
         action:
-          command: 'show running-config | include username'
+          commands: ['show running-config | include username']
           values: ['demouser']
+    - name: O4
+      description: Enable password
+      check:
+        devices: ['BR1', 'SW3']
+        action:
+          commands: ['show running-config | include enable']
+          values: ['enable secret']
+    - name: O5
+      description: Password encryption
+      check:
+        devices: ['HQ1', 'SW1']
+        action:
+          commands: ['show running-config | include service password-encryption']
+          values: ['^service password-encryption']
+    - name: O6
+      description: Local AAA
+      check:
+        devices: ['BR1', 'SW2']
+        action:
+          commands: ['show running-config | include aaa']
+          values:
+            - '^aaa new-model'
+            - 'aaa authentication login default local'
+            - 'aaa authorization console'
+            - 'aaa authorization exec default local'
+    - name: O7
+      description: IPv4 addressing and connectivity
+      check:
+        devices: ['HQ1', 'BR1']
+        action:
+          commands: 
+            - 'ping 3.3.3.3'
+            - 'ping 1.1.1.1'
+          values: ['!{3,}']
+    - name: O8
+      description: IPv6 addressing and connectivity
+      check:
+        devices: ['HQ1', 'BR1']
+        action:
+          commands:
+            - 'ping 2001:A:B:1::1'
+            - 'ping 2001:A:B:3::1'
+          values: ['!{3,}']
+    - name: O9
+      description: Radius auth
+      check:
+        devices: ['HQ1']
+        action:
+          commands: ['show aaa method-lists all | include method_man']
+          values: ['name=method_man valid=TRUE id=[0-9]{1,} :state=ALIVE : LOCAL  SERVER_GROUP radius']
+    - name: O10
+      description: Remote management
+      check:
+        devices: ['SW1', 'BR1']
+        action:
+          commands: ['show ip ssh | include version']
+          values: ['SSH Enabled - version 2.0']
+    - name: O11
+      description: VTP Disable
+      check:
+        devices: ['SW1', 'SW2', 'SW3']
+        action:
+          commands: ['show vtp status | include Operating']
+          values: ['VTP Operating Mode {1,}: Off']
+    - name: O12
+      description: DTP manipulation
+      check:
+        devices:
+          - 'SW1'
+          - 'SW2'
+        action:
+          commands: 
+            - 'sh interfaces e1/0 switchport | include Negotiation of Trunking'
+            - 'sh interfaces e1/1 switchport | include Negotiation of Trunking'
+          values:
+            - 'Negotiation of Trunking: Off'
+    - name: O13
+      description: Etherchannel LACP
+      check:
+        devices:
+          - 'SW1'
+        action:
+          commands: 
+            - 'show etherchannel summary | include LACP'
+          values:
+            - '1      Po1(SU)         LACP      Et0/0(P)    Et0/1(P)'
+    - name: O14
+      description: Etherchannel PAgP
+      check:
+        devices:
+          - 'SW1'
+        action:
+          commands: 
+            - 'show etherchannel summary | include PAgP'
+          values:
+            - '2      Po2(SU)         PAgP      Et0/2(P)    Et0/3(P)'
+    - name: O15
+      description: MST enable
+      check:
+        devices:
+          - 'SW1'
+          - 'SW2'
+          - 'SW3'
+        action:
+          commands: 
+            - 'show spanning-tree summary | include Switch is in'
+          values:
+            - 'Switch is in mst mode'
+    - name: O16
+      description: MST configuration
+      check:
+        devices:
+          - 'SW1'
+          - 'SW2'
+          - 'SW3'
+        action:
+          commands: 
+            - 'show spanning-tree mst configuration | include 1000,1200,1300'
+          values:
+            - '1         1000,1200,1300'
+    - name: O17
+      description: STP portfast
+      check:
+        devices:
+          - 'SW1'
+        action:
+          commands: 
+            - 'show running-config interface e1/0 | include spanning-tree'
+          values:
+            - 'spanning-tree portfast edge trunk'
+    - name: O18
+      description: VLAN port assignment
+      check:
+        devices:
+          - 'SW2'
+          - 'SW3'
+        action:
+          commands: 
+            - 'show vlan brief | include Et1/1'
+          values:
+            - '1300 OFFICE                           active    Et1/1'
+            - '1200 DATA                             active    Et1/1'

@@ -1,4 +1,6 @@
-import yaml
+import yaml, re, logging
+
+logger = logging.getLogger(__name__)
 
 def dev_connect(testbed):
     for dev in testbed.devices:
@@ -9,3 +11,14 @@ def scheme_parse(file_path):
         scheme = yaml.safe_load(in_file)
     
     return scheme
+
+def check_out(values, output):
+    result = False
+    for value in values:
+        output = re.sub(r'[ \t]+', ' ', output)
+        value = re.sub(r'[ \t]+', ' ', value)
+        logger.critical(f"Value must be: {value}")
+        logger.info(f"Value is: {output}")
+        if re.findall(value, output, re.MULTILINE):
+            result = True
+    return result
