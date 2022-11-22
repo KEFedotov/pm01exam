@@ -15,8 +15,8 @@ def scheme_parse(file_path):
 def check_out(values, output):
     result = False
     for value in values:
-        output = re.sub(r'[ \t]+', ' ', output)
-        value = re.sub(r'[ \t]+', ' ', value)
+        output = re.sub(r'\s+', ' ', output)
+        value = re.sub(r'\s+', ' ', value)
         logger.critical(f"Value must be: {value}")
         logger.info(f"Value is: {output}")
         if re.findall(value, output, re.MULTILINE):

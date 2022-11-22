@@ -112,7 +112,7 @@ criterions:
           commands: 
             - 'show etherchannel summary | include LACP'
           values:
-            - '1      Po1(SU)         LACP      Et0/0(P)    Et0/1(P)'
+            - '1.{1,}Po1(SU).{1,}Et0/0(P).{1,}Et0/1(P)'
     - name: O14
       description: Etherchannel PAgP
       check:
@@ -122,7 +122,7 @@ criterions:
           commands: 
             - 'show etherchannel summary | include PAgP'
           values:
-            - '2      Po2(SU)         PAgP      Et0/2(P)    Et0/3(P)'
+            - '2.{1,}Po2(SU).{1,}Et0/2(P).{1,}Et0/3(P)'
     - name: O15
       description: MST enable
       check:
@@ -167,5 +167,95 @@ criterions:
           commands: 
             - 'show vlan brief | include Et1/1'
           values:
-            - '1300 OFFICE                           active    Et1/1'
-            - '1200 DATA                             active    Et1/1'
+            - '1300 OFFICE.{1,}active.{1,}Et1/1'
+            - '1200 DATA.{1,}active.{1,}Et1/1'
+    - name: O19
+      description: SW1 interface shutdown
+      check:
+        devices:
+          - 'SW1'
+        action:
+          commands: 
+            - 'show ip interface brief | include administratively down'
+          values:
+            - 'Ethernet1/1.{1,}Ethernet1/2.{1,}Ethernet1/3'
+    - name: O20
+      description: Shutdown unused ports
+      check:
+        devices:
+          - 'SW2'
+        action:
+          commands: 
+            - 'show ip interface brief | include administratively down'
+          values:
+            - 'Ethernet0/2.{1,}Ethernet0/3.{1,}Ethernet1/2.{1,}Ethernet1/3.{1,}Vlan1'
+    - name: O21
+      description: Vlan unused ports
+      check:
+        devices:
+          - 'SW3'
+        action:
+          commands: 
+            - 'show vlan brief | include 1600'
+          values:
+            - 'Et0/0, Et0/1, Et1/2, Et1/3'
+    - name: O22
+      description: HQ1 IPoE ISP1
+      check:
+        devices:
+          - 'HQ1'
+        action:
+          commands: 
+            - 'ping 100.45.10.1 source 100.45.10.2'
+          values:
+            - '!{3,}'
+    - name: O23
+      description: HQ1 IPoE ISP2
+      check:
+        devices:
+          - 'HQ1'
+        action:
+          commands: 
+            - 'show ip interface brief | include Ethernet0/1.901'
+          values:
+            - 'Ethernet0/1.901.{1,}22.84.4.6.{1,}manual up.{1,}up'
+    - name: O24
+      description: PPP Multilink
+      check:
+        devices:
+          - 'BR1'
+        action:
+          commands: 
+            - 'show ip interface brief | include Multilink'
+          values:
+            - 'Multilink1.{1,}100.45.5.2.{1,}YES IPCP.{1,}up.{1,}up'
+    - name: O25
+      description: BR1 HDLC ISP1
+      check:
+        devices:
+          - 'BR1'
+        action:
+          commands: 
+            - 'ping 22.84.4.1 source 22.84.4.2'
+          values:
+            - '!{3,}'
+    - name: O26
+      description: OSPF neighbors
+      check:
+        devices:
+          - 'HQ1'
+        action:
+          commands: 
+            - 'show ip ospf neighbor'
+          values:
+            - '3.3.3.3.{1,}FULL/.{1,}172.16.1.2'
+    - name: O27
+      description: OSPF routes
+      check:
+        devices:
+          - 'HQ1'
+        action:
+          commands: 
+            - 'show ip route ospf | include (O.+110)'
+          values:
+            - 'O.{1,}192.168.2.0.{1,}110.{1,}172.16.1.2'
